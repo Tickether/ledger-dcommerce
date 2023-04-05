@@ -1,15 +1,35 @@
-import type { NextPage } from 'next'
+import type { GetServerSideProps, NextPage } from 'next'
 import { Web3Button, Web3NetworkSwitch } from '@web3modal/react';
 import { Network, Alchemy } from 'alchemy-sdk';
 import Link from "next/link";
+import { Attributes, NFTs, Product } from '../models/models';
+import { type } from 'os';
 
 
+/*
 
+interface ProductPageProps {
+  products: Product[]
+}
 
+*/
 
+/*
+async function loadProducts() {
+  const settings = {
+    apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY, //"wQhhyq4-jQcPzFRui3PljR6pzRwd5N_n",
+    network: Network.ETH_SEPOLIA,
+  };
 
-
-export async function getStaticProps() {
+  // init with key and chain info 
+  const alchemy = new Alchemy(settings);
+  // Print total NFT collection returned in the response:
+  const { nfts } = await alchemy.nft.getNftsForContract("0x76b41A6b4f4F53F8d15163FBC23b9C2B306b48DA")
+  const loadedProducts = nfts
+  return loadedProducts 
+}
+*/
+export const getServerSideProps: GetServerSideProps = async () => {
   
   const settings = {
     apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY, //"wQhhyq4-jQcPzFRui3PljR6pzRwd5N_n",
@@ -19,17 +39,18 @@ export async function getStaticProps() {
   // init with key and chain info 
   const alchemy = new Alchemy(settings);
   // Print total NFT collection returned in the response:
-  const loadProducts = await alchemy.nft.getNftsForContract("0x76b41A6b4f4F53F8d15163FBC23b9C2B306b48DA")
-  const loadedProducts = JSON.stringify(loadProducts)
-
+  const { nfts } = await alchemy.nft.getNftsForContract("0x76b41A6b4f4F53F8d15163FBC23b9C2B306b48DA")
+  const loadedProducts = JSON.stringify(nfts)
+  // console.log(nfts) 
   // Pass data to the page via props
   return { props: { loadedProducts } }
 }
 
-const Home: NextPage <{ loadedProducts: string }> = ({ loadedProducts }) => {
+const ProductsPage: NextPage <{ loadedProducts: string }> = ({ loadedProducts }) => {
   
-  const loadProducts = /* Object.entries */((JSON.parse(loadedProducts)).nfts)
-  console.log(loadProducts)
+  const loadProducts = /* Object.entries */((JSON.parse(loadedProducts)))
+  console.log(loadProducts) 
+
   
   
 
@@ -39,31 +60,49 @@ const Home: NextPage <{ loadedProducts: string }> = ({ loadedProducts }) => {
       <Web3Button icon="show" label="Connect Wallet" balance="show" />
       {/* Network Switcher Button */}
       <Web3NetworkSwitch />
-      
-      {/* 
       <div>
-    
-      {loadProducts.map(()=>(
-        
-        <Rentals item={item} key={item.tokenId}/> 
+         
+      {loadProducts.map(( product: Product) =>(
+        <div key={product.tokenId}>
+          <img src={product.media[0].gateway} alt="" />
+          {product.description}
+          <br/>
+          {(product.rawMetadata.attributes).map((attributes: Attributes)=>(
+            <div key={attributes.trait_type}>
+              {attributes.trait_type}
+
+            </div>
+          ))}
+        </div>
       ))}
-        
+      
       </div>
-      */}
+      
+      
+      
+      
       
     </>
   );
 }
 
-export default Home
+export default ProductsPage
 
 
 // unused snippets
 //import { useEffect } from 'react';
 
 //import { SDK, Auth } from '@infura/sdk';
-
+//<Rentals item={item} key={item.tokenId}/> 
 /*
+
+{ products.map((product : Product)=>(
+          <Link href="/">
+              <p>{product.name}</p>
+          </Link>
+        ))}
+
+
 const auth = new Auth({
   projectId: process.env.INFURA_API_KEY,
   secretId: process.env.INFURA_API_KEY_SECRET,
