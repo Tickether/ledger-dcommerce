@@ -4,6 +4,7 @@ import { Network, Alchemy } from 'alchemy-sdk';
 import Link from "next/link";
 import { Attributes, NFTs, Product } from '../models/models';
 import { type } from 'os';
+import ProductComponent from '../components/ProductComponent';
 
 
 /*
@@ -48,7 +49,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
 
 const ProductsPage: NextPage <{ loadedProducts: string }> = ({ loadedProducts }) => {
   
-  const loadProducts = /* Object.entries */((JSON.parse(loadedProducts)))
+  const loadProducts = (JSON.parse(loadedProducts))
   console.log(loadProducts) 
 
   
@@ -63,17 +64,7 @@ const ProductsPage: NextPage <{ loadedProducts: string }> = ({ loadedProducts })
       <div>
          
       {loadProducts.map(( product: Product) =>(
-        <div key={product.tokenId}>
-          <img src={product.media[0].gateway} alt="" />
-          {product.description}
-          <br/>
-          {(product.rawMetadata.attributes).map((attributes: Attributes)=>(
-            <div key={attributes.trait_type}>
-              {attributes.trait_type}
-
-            </div>
-          ))}
-        </div>
+        <ProductComponent product={product} key={product.tokenId}/>
       ))}
       
       </div>
@@ -129,4 +120,18 @@ const auth = new Auth({
     }
     loadProducts()
   },[])
+  */
+
+  /*
+<div key={product.tokenId}>
+          <img src={product.media[0].gateway} alt="" />
+          {product.description}
+          <br/>
+          {(product.rawMetadata.attributes).map((attributes: Attributes)=>(
+            <div key={attributes.trait_type}>
+              {attributes.trait_type}
+
+            </div>
+          ))}
+        </div>
   */
