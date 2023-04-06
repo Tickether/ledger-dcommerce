@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from 'next/image';
-import { Product } from "../models/models";
+import { Attributes, Product } from "../models/models";
 
 interface ProductProps {
     product: Product
@@ -10,16 +10,31 @@ const ProductComponent = ({product}: ProductProps) => {
 
 
     return (
-        <div>
+        <div className="product">
             <Link href={`/${product.title}`}>
-                <div className="rentalContainer">
+                <div className="productContainer">
                     <img 
                         src={product.media[0].gateway} 
                         alt="" 
                         className="rentalImg" 
                     />
-                    <div className="rentalDetails">
-                        <h2 className="siTitle">{product.title}</h2>
+                    <div className="productDetails">
+                        <div className="productTitle">
+                            <h2>{product.title}</h2>
+                        </div>
+                        <div className="productDesc">
+                            <p>{product.description}</p>
+                        </div>
+                        <div className="productAttr">
+                            {(product.rawMetadata.attributes).map((attributes: Attributes)=>(
+                                <div key={attributes.trait_type}>
+                                {attributes.trait_type}
+
+                                </div>
+                            ))}
+                        </div>
+                        
+                        
                     </div>
                     
                 </div>
