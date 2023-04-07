@@ -1,10 +1,11 @@
 import type { GetServerSideProps, NextPage } from 'next'
-import { Web3Button, Web3NetworkSwitch } from '@web3modal/react';
 import { Network, Alchemy } from 'alchemy-sdk';
 import Link from "next/link";
 import { Attributes, NFTs, Product } from '../models/models';
 import { type } from 'os';
 import ProductComponent from '../components/ProductComponent';
+import NavbarComponent from '../components/NavbarComponent';
+import FooterComponent from '../components/FooterComponent';
 
 
 /*
@@ -40,7 +41,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
   // init with key and chain info 
   const alchemy = new Alchemy(settings);
   // Print total NFT collection returned in the response:
-  const { nfts } = await alchemy.nft.getNftsForContract("0x76b41A6b4f4F53F8d15163FBC23b9C2B306b48DA")
+  const { nfts } = await alchemy.nft.getNftsForContract("0xa2F704361FE9C37A824D704DAaB18f1b7949e8A2")
   const loadedProducts = JSON.stringify(nfts)
   // console.log(nfts) 
   // Pass data to the page via props
@@ -57,22 +58,19 @@ const ProductsPage: NextPage <{ loadedProducts: string }> = ({ loadedProducts })
 
   return (
     <>
-      {/* Predefined button  */}
-      <Web3Button icon="show" label="Connect Wallet" balance="show" />
-      {/* Network Switcher Button */}
-      <Web3NetworkSwitch />
       <div>
-         
-      {loadProducts.map(( product: Product) =>(
-        <ProductComponent product={product} key={product.tokenId}/>
-      ))}
-      
+        <div>
+          <NavbarComponent/>
+        </div>
+        <div>
+          {loadProducts.map(( product: Product) =>(
+            <ProductComponent product={product} key={product.tokenId}/>
+          ))} 
+        </div>
+        <div>
+          <FooterComponent/>
+        </div>
       </div>
-      
-      
-      
-      
-      
     </>
   );
 }
