@@ -65,7 +65,7 @@ const ProductsPage: NextPage <{ loadedProducts: string }> = ({ loadedProducts })
         <div>
           {loadProducts.map(( product: Product) =>(
             <ProductComponent product={product} key={product.tokenId}/>
-          ))} 
+          ))}
         </div>
         <div>
           <FooterComponent/>

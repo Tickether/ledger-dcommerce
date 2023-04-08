@@ -3,6 +3,9 @@ import Link from "next/link";
 import { Attributes, Product } from "../models/models";
 import { useAccount, useContractRead, useContractWrite } from "wagmi";
 import { BigNumber, ethers } from 'ethers';
+import { useRecoilState } from 'recoil'
+import { cartState } from "../atom/cartState";
+import { useToasts } from 'react-toast-notifications';
 
 
 interface ProductProps {
@@ -13,12 +16,19 @@ interface ProductProps {
 
 
 
+
+
 const ProductComponent = ({product}: ProductProps) => {
 
-    const {address, isConnected} = useAccount()
-    //const wallet_ = wallet.address
+    
 
-    const contractReadRentFeeNative = useContractRead({
+    const [cartItem, setCartItem] = useRecoilState(cartState)
+
+    const {address, isConnected} = useAccount()
+
+    const { addToast } = useToasts();
+
+    const contractReadFee = useContractRead({
         address: "0xa2F704361FE9C37A824D704DAaB18f1b7949e8A2",
         abi: [
             {
@@ -35,11 +45,11 @@ const ProductComponent = ({product}: ProductProps) => {
         chainId: 11155111,
     })
 
-    const getLatestPrice  = (contractReadRentFeeNative.data?._hex)
-    const latestPrice = parseInt(getLatestPrice!, 16)
-    const etherPrice = ethers.utils.formatEther(latestPrice.toString())
+    const getLatestPrice  = (contractReadFee.data!)
+    const latestPrice = (getLatestPrice.toString())
+    const etherPrice = ethers.utils.formatEther(latestPrice)
 
-    console.log((etherPrice))
+    console.log((getLatestPrice))
 
     const  contractWrite = useContractWrite({
         mode: 'recklesslyUnprepared',
@@ -54,9 +64,9 @@ const ProductComponent = ({product}: ProductProps) => {
             },
           ],
         functionName: "buy",
-        args: [ (address!) /*('0xa2F704361FE9C37A824D704DAaB18f1b7949e8A2')*/, (BigNumber.from(product.tokenId)), (BigNumber.from(1))],
+        args: [ (address!), (BigNumber.from(product.tokenId)), (BigNumber.from(1))],
         overrides: {
-            value: ethers.utils.parseEther((etherPrice).toString()),
+            value: getLatestPrice,
         },
         chainId: 11155111,
     })
@@ -67,7 +77,29 @@ const ProductComponent = ({product}: ProductProps) => {
         } catch (err) {
           console.log(err)
         }
-      }
+    }
+
+    const handleCartAdd = async () => {
+        try {
+            if (cartItem.findIndex(cart => cart.product.tokenId ===product.tokenId) === -1) {
+                setCartItem(prevState => [...prevState, { product, quantity: 1, price: latestPrice }])
+                addToast('Carti!!!', { appearance: 'success' });
+            } 
+            /*
+            else {
+                
+                setCartItem(prevState => {
+                    return prevState.map((item) =>{
+                        return item.product.tokenId === product.tokenId ? {...item.product, quantity: (item.quantity + 1) } : item
+                    })
+                })
+                addToast(`added another ${product.title} to Carti!!!`, { appearance: 'success' });
+            }
+          */
+        } catch (err) {
+          console.log(err)
+        }
+    }
 
 
     return (
@@ -99,8 +131,8 @@ const ProductComponent = ({product}: ProductProps) => {
                         ))}
                     </div>
                     <div>
-                        <button disabled={!isConnected} onClick={handleBuy}>Buy</button>
-                        <button>Add to Cart</button>
+                        <button disabled={!isConnected} onClick={handleBuy}> Buy </button>
+                        <button onClick={handleCartAdd}> Add to Cart </button> 
                     </div>
                 </div>
             </div>

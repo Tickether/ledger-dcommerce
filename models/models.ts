@@ -41,3 +41,4 @@ export interface Product{
 export interface NFTs{
     nfts: any[],
 }
+

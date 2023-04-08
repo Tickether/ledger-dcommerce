@@ -5,6 +5,8 @@ import { Web3Modal } from '@web3modal/react'
 import { configureChains, createClient, WagmiConfig } from 'wagmi'
 import { sepolia, mainnet, polygon } from 'wagmi/chains'
 import { useEffect, useState } from 'react'
+import { RecoilRoot } from 'recoil'
+import { ToastProvider } from 'react-toast-notifications'
 
 
 
@@ -48,7 +50,11 @@ function MyApp({ Component, pageProps }: AppProps) {
     <>
       { ready ? (
         <WagmiConfig client={wagmiClient}>
-          <Component {...pageProps} />
+          <RecoilRoot>
+            <ToastProvider>
+              <Component {...pageProps} />
+            </ToastProvider>
+          </RecoilRoot>
         </WagmiConfig>
       ) : (
         null
