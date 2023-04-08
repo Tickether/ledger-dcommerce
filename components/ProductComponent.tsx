@@ -46,8 +46,8 @@ const ProductComponent = ({product}: ProductProps) => {
     })
 
     const getLatestPrice  = (contractReadFee.data!)
-    const latestPrice = (getLatestPrice.toString())
-    const etherPrice = ethers.utils.formatEther(latestPrice)
+    //const latestPrice = (getLatestPrice.toString())
+    //const etherPrice = ethers.utils.formatEther(latestPrice)
 
     console.log((getLatestPrice))
 
@@ -82,7 +82,7 @@ const ProductComponent = ({product}: ProductProps) => {
     const handleCartAdd = async () => {
         try {
             if (cartItem.findIndex(cart => cart.product.tokenId ===product.tokenId) === -1) {
-                setCartItem(prevState => [...prevState, { product, quantity: 1, price: latestPrice }])
+                setCartItem(prevState => [...prevState, { product, quantity: 1, price: '0' }])
                 addToast('Carti!!!', { appearance: 'success' });
             } 
             /*
@@ -117,7 +117,7 @@ const ProductComponent = ({product}: ProductProps) => {
                         <h2>{product.title}</h2>
                     </div>
                     <div>
-                        <p>eth:{etherPrice}</p>
+                        <p>eth:{0}</p>
                     </div>
                     <div className="productDesc">
                         <p>{product.description}</p>

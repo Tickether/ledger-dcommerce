@@ -1,10 +1,7 @@
 
 import { useContractRead } from 'wagmi';
-import { Product } from '../models/models';
 import { BigNumber, ethers } from 'ethers';
 import { CartProps } from '../atom/cartState';
-//import { cartState } from '../atom/cartState';
-//import { useRecoilState } from 'recoil'
 
 
 
@@ -12,7 +9,6 @@ import { CartProps } from '../atom/cartState';
 const CartComponent = ({ product, quantity, price } : CartProps) => {
 
     console.log(product, quantity, price)
-    //const [cartItem, setCartItem] = useRecoilState(cartState)
 
     const contractReadFee = useContractRead({
         address: "0xa2F704361FE9C37A824D704DAaB18f1b7949e8A2",
@@ -32,14 +28,14 @@ const CartComponent = ({ product, quantity, price } : CartProps) => {
     })
 
     const getLatestPrice  = (contractReadFee.data!)
-    const latestPrice = (getLatestPrice.toString())
-    const etherPrice = ethers.utils.formatEther(latestPrice)
+    //const latestPrice = (getLatestPrice.toString())
+    //const etherPrice = ethers.utils.formatEther(latestPrice)
 
     return (
         <div className="cart">
             <span>{product.title}</span>
             <span>{quantity}</span>
-            <span>{quantity * Number(etherPrice)}</span>
+            <span>{quantity * Number(getLatestPrice)}</span>
         </div>
     );
 }
