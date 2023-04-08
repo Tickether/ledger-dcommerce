@@ -10,7 +10,7 @@ const NavbarComponent = () => {
 
     return (
         <div className="navbar">
-            <Link href='/'><div>dCommerce</div></Link>
+            <div>dCommerce</div>
             
             {/* Predefined button  */}
             <Web3Button icon="show" label="Connect Wallet" balance="show" />
