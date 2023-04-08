@@ -8,6 +8,6 @@ export interface CartProps {
 }
 
 export const cartState = atom<CartProps[]>({
-    key: 'cartState',
+    key: 'StateOfTheCart',
     default:[]
 })
