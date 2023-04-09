@@ -6,6 +6,7 @@ import { type } from 'os';
 import ProductComponent from '../components/ProductComponent';
 import NavbarComponent from '../components/NavbarComponent';
 import FooterComponent from '../components/FooterComponent';
+import styles from '../styles/Home.module.css'
 
 
 /*
@@ -58,17 +59,19 @@ const ProductsPage: NextPage <{ loadedProducts: string }> = ({ loadedProducts })
 
   return (
     <>
-      <div>
-        <div>
-          <NavbarComponent/>
-        </div>
-        <div>
-          {loadProducts.map(( product: Product) =>(
-            <ProductComponent product={product} key={product.tokenId}/>
-          ))}
-        </div>
-        <div>
-          <FooterComponent/>
+      <div className={styles.container}>
+        <div className={styles.wrapper}>
+          <div>
+            <NavbarComponent/>
+          </div>
+          <div className={styles.products}>
+            {loadProducts.map(( product: Product) =>(
+              <ProductComponent product={product} key={product.tokenId}/>
+            ))}
+          </div>
+          <div>
+            <FooterComponent/>
+          </div>
         </div>
       </div>
     </>

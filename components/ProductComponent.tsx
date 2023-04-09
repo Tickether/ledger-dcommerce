@@ -112,13 +112,13 @@ const ProductComponent = ({product}: ProductProps) => {
     return (
         <div className="product">
             <div className="productContainer">
-                <Link href={`/${product.title}`}>
+                <div>
                     <img 
                         src={product.media[0].gateway} 
                         alt="" 
                         className="rentalImg" 
                     />
-                </Link>
+                </div>
                 <div className="productDetails">
                     <div className="productTitle">
                         <h2>{product.title}</h2>

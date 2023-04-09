@@ -1,3 +1,4 @@
+import styles from '../styles/Cart.module.css'
 import type { NextPage } from 'next'
 import { cartState } from '../atom/cartState';
 import { useRecoilState } from 'recoil'
@@ -6,6 +7,7 @@ import CartComponent from '../components/CartComponent';
 import { BigNumber } from 'ethers';
 import { useAccount, useContractWrite, usePrepareContractWrite } from 'wagmi';
 import { useEffect, useState } from 'react';
+import FooterComponent from '../components/FooterComponent';
 
 
 
@@ -85,19 +87,28 @@ const CartPage : NextPage = () => {
    
 
     return (
-        <div className="cart">
-            <NavbarComponent/>
-            <div>
-                {
-                    cartItem.length <= 0 
-                    ? <h1>your cart is empty</h1>
-                    : cartItem.map(item => <CartComponent key={item.product.tokenId} product={item.product} quantity={item.quantity} price={item.price}/> )
-                }
-            </div>
-            <div>
-                <button onClick={handleBuy} disabled={!isConnected}>
-                    Buy
-                </button>
+        <div className={styles.container}>
+            <div className={styles.wrapper}>
+                <div>
+                    <NavbarComponent/>
+                </div>
+                <div>
+                    <div>
+                        {
+                            cartItem.length <= 0 
+                            ? <h1>your cart is empty</h1>
+                            : cartItem.map(item => <CartComponent key={item.product.tokenId} product={item.product} quantity={item.quantity} price={item.price}/> )
+                        }
+                    </div>
+                    <div>
+                        <button onClick={handleBuy} disabled={!isConnected}>
+                            Buy
+                        </button>
+                    </div>
+                </div>
+                <div>
+                    <FooterComponent/>
+                </div>
             </div>
         </div>
     );
