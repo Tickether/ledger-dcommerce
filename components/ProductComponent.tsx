@@ -4,7 +4,7 @@ import { Attributes, Product } from "../models/models";
 import { useAccount, useContractRead, useContractWrite } from "wagmi";
 import { BigNumber, ethers } from 'ethers';
 import { useRecoilState } from 'recoil'
-import { cartState } from "../atom/cartState";
+import { CartProps, cartState } from "../atom/cartState";
 import { useToasts } from 'react-toast-notifications';
 //import { CartProps } from '../atom/cartState';
 
@@ -81,20 +81,25 @@ const ProductComponent = ({product}: ProductProps) => {
     }
 
     const handleCartAdd = async () => {
+        //const 
         try {
             if (cartItem.findIndex(cart => cart.product.tokenId ===product.tokenId) === -1) {
                 setCartItem(prevState => [...prevState, { product, quantity: 1, price: latestPrice }])
                 addToast('Carti!!!', { appearance: 'success' });
             } 
-            
             else {
-                /*
                 setCartItem(prevState => {
-                    return prevState.map((item) =>{
-                        return item.product.tokenId === product.tokenId ? {...item.product, quantity: (item.quantity + 1) } : item
-                    })
-                })
-                */
+                    const updatedCart = prevState.map(item => {
+                        if (item.product.tokenId === product.tokenId) {
+                            return {
+                                ...item,
+                                quantity: item.quantity + 1
+                            };
+                        }
+                        return item;
+                    });
+                    return updatedCart as CartProps[];
+                });
                 addToast(`added another ${product.title} to Carti!!!`, { appearance: 'success' });
             }
           
@@ -143,3 +148,11 @@ const ProductComponent = ({product}: ProductProps) => {
 }
 
 export default ProductComponent;
+
+/*
+                setCartItem(prevState => {
+                    return prevState.map((item) =>{
+                        return item.product.tokenId === product.tokenId ? {...item.product, quantity: (item.quantity + 1) } : item
+                    })
+                })
+                */
