@@ -28,14 +28,14 @@ const CartComponent = ({ product, quantity, price } : CartProps) => {
     })
 
     const getLatestPrice  = (contractReadFee.data!)
-    //const latestPrice = (getLatestPrice.toString())
-    //const etherPrice = ethers.utils.formatEther(latestPrice)
+    const latestPrice = (getLatestPrice._hex)
+    const etherPrice = ethers.utils.formatEther(latestPrice)
 
     return (
         <div className="cart">
             <span>{product.title}</span>
             <span>{quantity}</span>
-            <span>{quantity * Number(getLatestPrice)}</span>
+            <span>{quantity * Number(etherPrice)}</span>
         </div>
     );
 }

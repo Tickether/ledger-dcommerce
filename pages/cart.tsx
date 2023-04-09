@@ -1,12 +1,11 @@
 import type { NextPage } from 'next'
-import { Product } from '../models/models';
 import { cartState } from '../atom/cartState';
 import { useRecoilState } from 'recoil'
 import NavbarComponent from '../components/NavbarComponent';
 import CartComponent from '../components/CartComponent';
-import { BigNumber, ethers } from 'ethers';
-import { useAccount, useContractRead, useContractWrite } from 'wagmi';
-import { use, useEffect, useState } from 'react';
+import { BigNumber } from 'ethers';
+import { useAccount, useContractWrite, usePrepareContractWrite } from 'wagmi';
+import { useEffect, useState } from 'react';
 
 
 
@@ -30,27 +29,21 @@ const CartPage : NextPage = () => {
         const _values = []
         
         for (let i = 0; i < cartItem.length; i++) {
-            //const total = Number(cartItem[0].price) * Number(cartItem[i].quantity)
             
-             _tokenIDs.push(BigNumber.from(cartItem[i].product.tokenId))
-            _quantities.push(BigNumber.from(cartItem[i].quantity)) 
             const price = (BigInt(cartItem[i].price))
             const total = (price)*(BigInt(cartItem[i].quantity))
+            
             _values.push(total)
+            _tokenIDs.push(BigNumber.from(cartItem[i].product.tokenId))
+            _quantities.push(BigNumber.from(cartItem[i].quantity))
 
             console.log(BigNumber.from(price))
             console.log(cartItem[i].quantity)
             console.log(total)
         }
         const sumTotal = _values.reduce((acc: bigint, curr: bigint) => acc + curr, BigInt(0));
-        //const summ = ethers.utils.parseEther((sum).toString())
         console.log(sumTotal)
-        //setCartPrice(BigNumber.from((sumTotal)))
-        //setCartPrice(((sum)))
-        /**
-        83333333333333333
-        83333333333333333n 
-         * */
+        
         setCartPrice(BigNumber.from((sumTotal)))
         setTokenIDs(_tokenIDs)
         setQuantities(_quantities)
@@ -60,26 +53,27 @@ const CartPage : NextPage = () => {
      console.log(quantities)
      console.log(cartPrice)
 
-
-    const  contractWrite = useContractWrite({
-        mode: 'recklesslyUnprepared',
-        address: "0xa2F704361FE9C37A824D704DAaB18f1b7949e8A2",
+    const { config, error } = usePrepareContractWrite({
+        address: '0xa2F704361FE9C37A824D704DAaB18f1b7949e8A2',
         abi: [
             {
-              name: 'buyAll',
+              name: 'buyBulk',
               inputs: [ {internalType: "address", name: "to", type: "address"}, {internalType: "uint256[]", name: "ids", type: "uint256[]"}, {internalType: "uint256[]", name: "amounts", type: "uint256[]" } ],
               outputs: [],
               stateMutability: 'payable',
               type: 'function',
             },
           ],
-        functionName: "buyAll",
+        functionName: 'buyBulk',
         args: [ (address!), (tokenIDs), (quantities) ],
         overrides: {
-            value: cartPrice, /**ethers.utils.parseEther((cartPrice)) */
+            value: cartPrice,
         },
         chainId: 11155111,
     })
+
+    const  contractWrite = useContractWrite(config)
+    
 
     const handleBuy = async () => {
         try {
@@ -112,6 +106,7 @@ const CartPage : NextPage = () => {
 export default CartPage;
 
 
+
 /*
             const contractReadFee = useContractRead({
                 address: "0xa2F704361FE9C37A824D704DAaB18f1b7949e8A2",
@@ -131,3 +126,25 @@ export default CartPage;
             })
              //_value = contractReadFee.data! * (BigNumber.from(cartItem[i].quantity))  
             */
+
+              /*
+    const  contractWrite = useContractWrite({
+        mode: 'recklesslyUnprepared',
+        address: "0xa2F704361FE9C37A824D704DAaB18f1b7949e8A2",
+        abi: [
+            {
+              name: 'buyAll',
+              inputs: [ {internalType: "address", name: "to", type: "address"}, {internalType: "uint256[]", name: "ids", type: "uint256[]"}, {internalType: "uint256[]", name: "amounts", type: "uint256[]" } ],
+              outputs: [],
+              stateMutability: 'payable',
+              type: 'function',
+            },
+        ],
+        functionName: "buyAll",
+        args: [ (address!), (tokenIDs), (quantities) ],
+        overrides: {
+            value: cartPrice, //*ethers.utils.parseEther((cartPrice))
+        },
+        chainId: 11155111,
+    })
+    */

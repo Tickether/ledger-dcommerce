@@ -6,6 +6,7 @@ import { BigNumber, ethers } from 'ethers';
 import { useRecoilState } from 'recoil'
 import { cartState } from "../atom/cartState";
 import { useToasts } from 'react-toast-notifications';
+//import { CartProps } from '../atom/cartState';
 
 
 interface ProductProps {
@@ -62,7 +63,7 @@ const ProductComponent = ({product}: ProductProps) => {
               stateMutability: 'payable',
               type: 'function',
             },
-          ],
+        ],
         functionName: "buy",
         args: [ (address!), (BigNumber.from(product.tokenId)), (BigNumber.from(1))],
         overrides: {
@@ -85,17 +86,18 @@ const ProductComponent = ({product}: ProductProps) => {
                 setCartItem(prevState => [...prevState, { product, quantity: 1, price: latestPrice }])
                 addToast('Carti!!!', { appearance: 'success' });
             } 
-            /*
+            
             else {
-                
+                /*
                 setCartItem(prevState => {
                     return prevState.map((item) =>{
                         return item.product.tokenId === product.tokenId ? {...item.product, quantity: (item.quantity + 1) } : item
                     })
                 })
+                */
                 addToast(`added another ${product.title} to Carti!!!`, { appearance: 'success' });
             }
-          */
+          
         } catch (err) {
           console.log(err)
         }
