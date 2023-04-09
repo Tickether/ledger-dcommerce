@@ -82,7 +82,7 @@ const ProductComponent = ({product}: ProductProps) => {
     const handleCartAdd = async () => {
         try {
             if (cartItem.findIndex(cart => cart.product.tokenId ===product.tokenId) === -1) {
-                setCartItem(prevState => [...prevState, { product, quantity: 1, price: '0' }])
+                setCartItem(prevState => [...prevState, { product, quantity: 1, price: latestPrice }])
                 addToast('Carti!!!', { appearance: 'success' });
             } 
             /*
