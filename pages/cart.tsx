@@ -87,23 +87,27 @@ const CartPage : NextPage = () => {
    
 
     return (
-        <div className={styles.container}>
-            <div className={styles.wrapper}>
+        <div>
+            <div>
                 <div>
                     <NavbarComponent/>
                 </div>
-                <div>
-                    <div>
-                        {
-                            cartItem.length <= 0 
-                            ? <h1>your cart is empty</h1>
-                            : cartItem.map(item => <CartComponent key={item.product.tokenId} product={item.product} quantity={item.quantity} price={item.price}/> )
-                        }
-                    </div>
-                    <div>
-                        <button onClick={handleBuy} disabled={!isConnected}>
-                            Buy
-                        </button>
+                <div className={styles.container}>
+                    <div className={styles.wrapper}>
+                        <div className={styles.cart}>
+                            <div className={styles.cartItems}>
+                                {
+                                    cartItem.length <= 0 
+                                    ? <h1>your cart is empty</h1>
+                                    : cartItem.map(item => <CartComponent key={item.product.tokenId} product={item.product} quantity={item.quantity} price={item.price}/> )
+                                }
+                            </div>
+                            <div className={styles.buy}>
+                                <button onClick={handleBuy} disabled={!isConnected}>
+                                    Buy
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div>

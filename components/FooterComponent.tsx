@@ -8,7 +8,7 @@ const FooterComponent = () => {
             <div className={styles.wrapper}>
                 <div className={styles.dev}>
                     <p>
-                        <span>Proundly made with</span>
+                        <span>made with</span>
                         <span> &hearts; </span>
                         <span>by geeloko.eth</span>
                     </p>

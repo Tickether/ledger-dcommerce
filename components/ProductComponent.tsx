@@ -1,3 +1,4 @@
+import styles from '../styles/Product.module.css'
 import Link from "next/link";
 //import Image from 'next/image';
 import { Attributes, Product } from "../models/models";
@@ -47,7 +48,7 @@ const ProductComponent = ({product}: ProductProps) => {
     })
 
     const getLatestPrice  = (contractReadFee.data!)
-    const latestPrice = (getLatestPrice._hex)
+    const latestPrice = (getLatestPrice?._hex)
     const etherPrice = ethers.utils.formatEther(latestPrice)
 
     console.log((getLatestPrice))
@@ -110,16 +111,16 @@ const ProductComponent = ({product}: ProductProps) => {
 
 
     return (
-        <div className="product">
-            <div className="productContainer">
+        <div>
+            <div className={styles.productCard}>
                 <div>
                     <img 
                         src={product.media[0].gateway} 
                         alt="" 
-                        className="rentalImg" 
+                        className={styles.productImg} 
                     />
                 </div>
-                <div className="productDetails">
+                <div className={styles.productDetails}>
                     <div className="productTitle">
                         <h2>{product.title}</h2>
                     </div>
@@ -129,17 +130,18 @@ const ProductComponent = ({product}: ProductProps) => {
                     <div className="productDesc">
                         <p>{product.description}</p>
                     </div>
-                    <div className="productAttr">
+                    <div className={styles.productAttr}>
                         {(product.rawMetadata.attributes).map((attributes: Attributes)=>(
                             <div key={attributes.trait_type}>
-                            {attributes.trait_type}
-
+                                <span className={styles.productSpan} style={{textDecoration: attributes.value === "No" ? "line-through" : "Yes"}}>
+                                    {attributes.trait_type}
+                                </span>
                             </div>
                         ))}
                     </div>
-                    <div>
-                        <button disabled={!isConnected} onClick={handleBuy}> Buy </button>
-                        <button onClick={handleCartAdd}> Add to Cart </button> 
+                    <div className={styles.productButtons}>
+                        <button className={styles.productBuy} disabled={!isConnected} onClick={handleBuy}> Buy </button>
+                        <button className={styles.productCart} onClick={handleCartAdd}> Add to Cart </button> 
                     </div>
                 </div>
             </div>

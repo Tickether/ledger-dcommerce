@@ -1,4 +1,4 @@
-
+import styles from '../styles/Cart.module.css'
 import { useContractRead } from 'wagmi';
 import { BigNumber, ethers } from 'ethers';
 import { CartProps } from '../atom/cartState';
@@ -32,10 +32,13 @@ const CartComponent = ({ product, quantity, price } : CartProps) => {
     const etherPrice = ethers.utils.formatEther(latestPrice)
 
     return (
-        <div className="cart">
-            <span>{product.title}</span>
-            <span>{quantity}</span>
-            <span>{quantity * Number(etherPrice)}</span>
+        <div className={styles.cartItem}>
+            <span>
+                <img src={product.media[0].gateway} className={styles.cartItemImg} alt="" />
+            </span>
+            <span className={styles.cartItemTitle}>{product.title}</span>
+            <span className={styles.cartItemQuantity}>{quantity}</span>
+            <span className={styles.cartItemTotal}>{quantity * Number(etherPrice)}</span>
         </div>
     );
 }

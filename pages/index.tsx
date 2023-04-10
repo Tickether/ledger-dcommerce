@@ -59,16 +59,21 @@ const ProductsPage: NextPage <{ loadedProducts: string }> = ({ loadedProducts })
 
   return (
     <>
-      <div className={styles.container}>
-        <div className={styles.wrapper}>
+      <div>
+        <div>
           <div>
             <NavbarComponent/>
           </div>
-          <div className={styles.products}>
-            {loadProducts.map(( product: Product) =>(
-              <ProductComponent product={product} key={product.tokenId}/>
-            ))}
+          <div className={styles.container}>
+            <div className={styles.wrapper}>
+              <div className={styles.products}>
+                {loadProducts.map(( product: Product) =>(
+                  <ProductComponent product={product} key={product.tokenId}/>
+                ))}
+              </div>    
+            </div>
           </div>
+          
           <div>
             <FooterComponent/>
           </div>
