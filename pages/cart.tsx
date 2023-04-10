@@ -4,7 +4,7 @@ import { cartState } from '../atom/cartState';
 import { useRecoilState } from 'recoil'
 import NavbarComponent from '../components/NavbarComponent';
 import CartComponent from '../components/CartComponent';
-import { BigNumber } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 import { useAccount, useContractWrite, usePrepareContractWrite } from 'wagmi';
 import { useEffect, useState } from 'react';
 import FooterComponent from '../components/FooterComponent';
@@ -23,6 +23,7 @@ const CartPage : NextPage = () => {
     const [tokenIDs, setTokenIDs] = useState<BigNumber[]>([])
     const [quantities, setQuantities] = useState<BigNumber[]>([])
     const [cartPrice, setCartPrice] = useState<BigNumber>()
+    const [totalCartPrice, setTotalCartPrice] = useState<String>()
 
 
     useEffect(() => {
@@ -47,6 +48,7 @@ const CartPage : NextPage = () => {
         console.log(sumTotal)
         
         setCartPrice(BigNumber.from((sumTotal)))
+        setTotalCartPrice(ethers.utils.formatEther(sumTotal.toString()) ) //onst etherPrice = ethers.utils.formatEther(cartPrice?._hex!) sumTotal.toString()
         setTokenIDs(_tokenIDs)
         setQuantities(_quantities)
      }, []);
@@ -54,6 +56,7 @@ const CartPage : NextPage = () => {
      console.log(tokenIDs)
      console.log(quantities)
      console.log(cartPrice)
+     console.log(totalCartPrice)
 
     const { config, error } = usePrepareContractWrite({
         address: '0xa2F704361FE9C37A824D704DAaB18f1b7949e8A2',
@@ -84,8 +87,8 @@ const CartPage : NextPage = () => {
           console.log(err)
         }
     }
-   
-
+    
+    
     return (
         <div>
             <div>
@@ -102,6 +105,13 @@ const CartPage : NextPage = () => {
                                     : cartItem.map(item => <CartComponent key={item.product.tokenId} product={item.product} quantity={item.quantity} price={item.price}/> )
                                 }
                             </div>
+                            <div>
+                                    {
+                                        cartItem.length <= 0 
+                                        ? <></>
+                                        : <p>TOTAL: {totalCartPrice}</p>
+                                    }
+                                </div>
                             <div className={styles.buy}>
                                 <button onClick={handleBuy} disabled={!isConnected}>
                                     Buy

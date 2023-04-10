@@ -16,11 +16,8 @@ const NavbarComponent = () => {
                 </div>
                 <div className={styles.right}>
                     <div className={styles.connect}>
-                        {/* Network Switcher Button */}
-                        <Web3NetworkSwitch />
-                                            
                         {/* Predefined button  */}
-                        <Web3Button icon="hide" label="Connect Wallet" balance="show" />                     
+                        <Web3Button icon="hide" label="Connect" balance="hide" />                     
                     </div>
                     <div className={styles.cart}>
                         <Link href='/cart'>
