@@ -47,9 +47,9 @@ const ProductComponent = ({product}: ProductProps) => {
         chainId: 11155111,
     })
 
-    const getLatestPrice  = (contractReadFee.data!)
-    const latestPrice = (getLatestPrice?._hex)
-    const etherPrice = ethers.utils.formatEther(latestPrice)
+    const getLatestPrice  = (contractReadFee?.data!)
+    const latestPrice = (getLatestPrice?._hex!)
+    const etherPrice = ethers.utils.formatEther(latestPrice!)
 
     console.log((getLatestPrice))
 
