@@ -11,7 +11,7 @@ const CartComponent = ({ product, quantity, price } : CartProps) => {
     console.log(product, quantity, price)
 
     const contractReadFee = useContractRead({
-        address: "0xa2F704361FE9C37A824D704DAaB18f1b7949e8A2",
+        address: "0x974cF70c6bb3d284f128541Aa51DB64Ad5AA7351",
         abi: [
             {
               name: 'getLatestPrice',

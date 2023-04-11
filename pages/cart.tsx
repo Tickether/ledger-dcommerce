@@ -59,7 +59,7 @@ const CartPage : NextPage = () => {
      console.log(totalCartPrice)
 
     const { config, error } = usePrepareContractWrite({
-        address: '0xa2F704361FE9C37A824D704DAaB18f1b7949e8A2',
+        address: '0x974cF70c6bb3d284f128541Aa51DB64Ad5AA7351',
         abi: [
             {
               name: 'buyBulk',
@@ -109,11 +109,11 @@ const CartPage : NextPage = () => {
                                     {
                                         cartItem.length <= 0 
                                         ? <></>
-                                        : <p>TOTAL: {totalCartPrice}</p>
+                                        : <p className={styles.cartTotal}>TOTAL: {totalCartPrice}</p>
                                     }
                                 </div>
                             <div className={styles.buy}>
-                                <button onClick={handleBuy} disabled={!isConnected}>
+                                <button className={styles.buyBtn} onClick={handleBuy} disabled={!isConnected}>
                                     Buy
                                 </button>
                             </div>
@@ -134,7 +134,7 @@ export default CartPage;
 
 /*
             const contractReadFee = useContractRead({
-                address: "0xa2F704361FE9C37A824D704DAaB18f1b7949e8A2",
+                address: "0x974cF70c6bb3d284f128541Aa51DB64Ad5AA7351",
                 abi: [
                     {
                       name: 'getLatestPrice',
@@ -155,7 +155,7 @@ export default CartPage;
               /*
     const  contractWrite = useContractWrite({
         mode: 'recklesslyUnprepared',
-        address: "0xa2F704361FE9C37A824D704DAaB18f1b7949e8A2",
+        address: "0x974cF70c6bb3d284f128541Aa51DB64Ad5AA7351",
         abi: [
             {
               name: 'buyAll',
