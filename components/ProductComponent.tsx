@@ -49,7 +49,8 @@ const ProductComponent = ({product}: ProductProps) => {
 
     const getLatestPrice  = (contractReadFee?.data!)
     const latestPrice = (getLatestPrice?._hex!)
-    const etherPrice = ethers.utils.formatEther(latestPrice!)
+    //const etherPrice = ethers.utils.formatEther(latestPrice!)
+    
 
     console.log((getLatestPrice))
 
