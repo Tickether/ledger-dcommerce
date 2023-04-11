@@ -7,6 +7,7 @@ import { BigNumber, ethers } from 'ethers';
 import { useRecoilState } from 'recoil'
 import { CartProps, cartState } from "../atom/cartState";
 import { useToasts } from 'react-toast-notifications';
+import { useEffect, useState } from 'react';
 //import { CartProps } from '../atom/cartState';
 
 
@@ -30,6 +31,8 @@ const ProductComponent = ({product}: ProductProps) => {
 
     const { addToast } = useToasts();
 
+    const [etherPrice, setEtherPrice] = useState<string>()
+
     const contractReadFee = useContractRead({
         address: "0x974cF70c6bb3d284f128541Aa51DB64Ad5AA7351",
         abi: [
@@ -49,7 +52,13 @@ const ProductComponent = ({product}: ProductProps) => {
 
     const getLatestPrice  = (contractReadFee?.data!)
     const latestPrice = (getLatestPrice?._hex!)
-    //const etherPrice = ethers.utils.formatEther(latestPrice!)
+
+    useEffect(() => {
+        // empty effect
+        if(latestPrice){
+            setEtherPrice(ethers.utils.formatEther(latestPrice))
+        }
+      }, [latestPrice]);
     
 
     console.log((getLatestPrice))
