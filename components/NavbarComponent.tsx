@@ -23,6 +23,9 @@ const NavbarComponent = () => {
                         <Link href='/cart'>
                             cart({cartItemn.length})
                         </Link>
+                        <Link href='/claim'>
+                            orders
+                        </Link>
                     </div>
                    
                     

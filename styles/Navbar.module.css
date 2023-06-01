@@ -34,5 +34,7 @@
 }
 
 .cart{
+  display: flex;
   font-weight: 900;
+  gap: .3vw;
 }

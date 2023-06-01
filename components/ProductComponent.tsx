@@ -34,7 +34,7 @@ const ProductComponent = ({product}: ProductProps) => {
     const [etherPrice, setEtherPrice] = useState<string>()
 
     const contractReadFee = useContractRead({
-        address: "0x974cF70c6bb3d284f128541Aa51DB64Ad5AA7351",
+        address: "0x1F005f90d9723bc5b4Df5CF4E7c5A5BEaC633F99",
         abi: [
             {
               name: 'getLatestPrice',
@@ -54,18 +54,18 @@ const ProductComponent = ({product}: ProductProps) => {
     const latestPrice = (getLatestPrice?._hex!)
 
     useEffect(() => {
-        // empty effect
+        // prevent site breaking effect
         if(latestPrice){
             setEtherPrice(ethers.utils.formatEther(latestPrice))
         }
-      }, [latestPrice]);
+    }, [latestPrice]);
     
 
     console.log((getLatestPrice))
 
     const  contractWrite = useContractWrite({
         mode: 'recklesslyUnprepared',
-        address: "0x974cF70c6bb3d284f128541Aa51DB64Ad5AA7351",
+        address: "0x1F005f90d9723bc5b4Df5CF4E7c5A5BEaC633F99",
         abi: [
             {
               name: 'buy',
@@ -162,9 +162,9 @@ const ProductComponent = ({product}: ProductProps) => {
 export default ProductComponent;
 
 /*
-                setCartItem(prevState => {
-                    return prevState.map((item) =>{
-                        return item.product.tokenId === product.tokenId ? {...item.product, quantity: (item.quantity + 1) } : item
-                    })
-                })
-                */
+    setCartItem(prevState => {
+        return prevState.map((item) =>{
+            return item.product.tokenId === product.tokenId ? {...item.product, quantity: (item.quantity + 1) } : item
+        })
+    })
+*/

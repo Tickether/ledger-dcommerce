@@ -59,7 +59,7 @@ const CartPage : NextPage = () => {
      console.log(totalCartPrice)
 
     const { config, error } = usePrepareContractWrite({
-        address: '0x974cF70c6bb3d284f128541Aa51DB64Ad5AA7351',
+        address: '0x1F005f90d9723bc5b4Df5CF4E7c5A5BEaC633F99',
         abi: [
             {
               name: 'buyBulk',
@@ -77,7 +77,7 @@ const CartPage : NextPage = () => {
         chainId: 11155111,
     })
 
-    const  contractWrite = useContractWrite(config)
+    const contractWrite = useContractWrite(config)
     
 
     const handleBuy = async () => {
@@ -134,7 +134,7 @@ export default CartPage;
 
 /*
             const contractReadFee = useContractRead({
-                address: "0x974cF70c6bb3d284f128541Aa51DB64Ad5AA7351",
+                address: "0x1F005f90d9723bc5b4Df5CF4E7c5A5BEaC633F99",
                 abi: [
                     {
                       name: 'getLatestPrice',
@@ -155,7 +155,7 @@ export default CartPage;
               /*
     const  contractWrite = useContractWrite({
         mode: 'recklesslyUnprepared',
-        address: "0x974cF70c6bb3d284f128541Aa51DB64Ad5AA7351",
+        address: "0x1F005f90d9723bc5b4Df5CF4E7c5A5BEaC633F99",
         abi: [
             {
               name: 'buyAll',

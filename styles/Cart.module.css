@@ -1,54 +1,60 @@
-.container{
+.container {
     display: flex;
-    width: 100%;
-    max-width: 100vw;
+    align-items: center; /* Center vertically */
+    justify-content: center; /* Center horizontally */
     height: 100vh;
     background: #212427;
-    justify-content: center;   
     color: aliceblue;
   }
   
-.wrapper{
+  .wrapper {
     display: flex;
-    width: 40%;
-    align-items: center;
-}
-
-
-.cart{
+    width: 90%;
+    max-width: 900px; /* Adjust the max-width as needed */
+    flex-direction: column;
+    align-items: center; /* Center items horizontally */
+  }
+  
+  .cart {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center; /* Center items horizontally */
     text-align: center;
-}
-
-.cartItems{
+    width: 100%; /* Take up the full width */
+    margin-bottom: 20px; /* Add some spacing at the bottom */
+  }
+  
+  .cartItems {
     display: flex;
     flex-direction: column;
     justify-content: center;
-}
-
-.cartItem{
+    width: 100%; /* Take up the full width */
+  }
+  
+  .cartItem {
     display: flex;
     gap: 30px;
     align-items: center;
     font-size: large;
     font-weight: bold;
-}
-
-.cartItemImg{
-    width: 100%;
-    height: 100%;
-    max-width: 100px;
-}
-
-.cartTotal{
+    margin-bottom: 10px; /* Add some spacing between items */
+  }
+  
+  .cartItemImg {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+  }
+  
+  .cartTotal {
     font-size: x-large;
     font-weight: bold;
     text-align: right;
-}
-
-
-.buyBtn{
+    margin-top: 20px; /* Add some spacing at the top */
+  }
+  
+  .buyBtn {
     border-radius: 5px;
-}
+    margin-top: 20px; /* Add some spacing at the top */
+  }
