@@ -31,15 +31,40 @@ const CartComponent = ({ product, quantity, price } : CartProps) => {
     const latestPrice = (getLatestPrice._hex)
     const etherPrice = ethers.utils.formatEther(latestPrice)
 
+    /*
+    const handleDecrement = () => {
+        if (quantity <= 1 ) return;
+        setClaimAmount(quantity - 1);
+    };
+
+    const handleIncrement = () => {
+        if (quantity >= 25 ) return;
+        setClaimAmount(quantity + 1);
+    };
+    */
+
     return (
         <div className={styles.cartItem}>
-            <span>
-                <img src={product.media[0].gateway} className={styles.cartItemImg} alt="" />
-            </span>
-            <span className={styles.cartItemTitle}>{product.title}</span>
-            <span className={styles.cartItemQuantity}>{quantity}</span>
-            <span className={styles.cartItemTotal}>{quantity * Number(etherPrice)}</span>
+            <div className={styles.cartItemWrapper}>
+                <div className={styles.cartItemTop}>
+                    <span>
+                        <img src={product.media[0].gateway} className={styles.cartItemImg} alt="" />
+                    </span>
+                    <span className={styles.cartItemTitle}>{product.title}</span>
+                    <span className={styles.cartItemTotal}>{quantity * Number(etherPrice)}</span>
+                </div>
+                <div className={styles.carItemButtons}>
+                    <button /*onClick={handleDecrement}*/>-</button>
+                    <input 
+                        readOnly
+                        type='number' 
+                        value={quantity}
+                    />
+                    <button /*onClick={handleIncrement}*/>+</button>
+                </div>
+            </div>  
         </div>
+
     );
 }
 
