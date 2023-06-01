@@ -5,9 +5,10 @@ import { useRecoilState } from 'recoil'
 import NavbarComponent from '../components/NavbarComponent';
 import CartComponent from '../components/CartComponent';
 import { BigNumber, ethers } from 'ethers';
-import { useAccount, useContractWrite, usePrepareContractWrite } from 'wagmi';
+import { useAccount, useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi';
 import { useEffect, useState } from 'react';
 import FooterComponent from '../components/FooterComponent';
+import { useToasts } from 'react-toast-notifications';
 
 
 
@@ -17,9 +18,12 @@ const CartPage : NextPage = () => {
 
     const [cartItem, setCartItem] = useRecoilState(cartState)
     console.log(cartItem)
+    console.log(cartState)
 
     const {address, isConnected} = useAccount()
+    const { addToast } = useToasts();
 
+    const [isLoading, SetLoading] = useState<boolean>()
     const [tokenIDs, setTokenIDs] = useState<BigNumber[]>([])
     const [quantities, setQuantities] = useState<BigNumber[]>([])
     const [cartPrice, setCartPrice] = useState<BigNumber>()
@@ -30,35 +34,59 @@ const CartPage : NextPage = () => {
         const _tokenIDs = []
         const _quantities = []
         const _values = []
-        
-        for (let i = 0; i < cartItem.length; i++) {
+        if (cartItem.length !== 0) {
+            for (let i = 0; i < cartItem.length; i++) {
             
-            const price = (BigInt(cartItem[i].price))
-            const total = (price)*(BigInt(cartItem[i].quantity))
+                const price = (BigInt(cartItem[i].price))
+                const total = (price)*(BigInt(cartItem[i].quantity))
+                
+                _values.push(total)
+                _tokenIDs.push(BigNumber.from(cartItem[i].product.tokenId))
+                _quantities.push(BigNumber.from(cartItem[i].quantity))
+    
+                console.log(BigNumber.from(price))
+                console.log(cartItem[i].quantity)
+                console.log(total)
+            }
+            const sumTotal = _values.reduce((acc: bigint, curr: bigint) => acc + curr, BigInt(0));
+            console.log(sumTotal)
             
-            _values.push(total)
-            _tokenIDs.push(BigNumber.from(cartItem[i].product.tokenId))
-            _quantities.push(BigNumber.from(cartItem[i].quantity))
-
-            console.log(BigNumber.from(price))
-            console.log(cartItem[i].quantity)
-            console.log(total)
+            setCartPrice(BigNumber.from((sumTotal)))
+            setTotalCartPrice(ethers.utils.formatEther(sumTotal.toString()) ) //onst etherPrice = ethers.utils.formatEther(cartPrice?._hex!) sumTotal.toString()
+            setTokenIDs(_tokenIDs)
+            setQuantities(_quantities)   
         }
-        const sumTotal = _values.reduce((acc: bigint, curr: bigint) => acc + curr, BigInt(0));
-        console.log(sumTotal)
-        
-        setCartPrice(BigNumber.from((sumTotal)))
-        setTotalCartPrice(ethers.utils.formatEther(sumTotal.toString()) ) //onst etherPrice = ethers.utils.formatEther(cartPrice?._hex!) sumTotal.toString()
-        setTokenIDs(_tokenIDs)
-        setQuantities(_quantities)
-     }, []);
+     }, [cartItem]);
 
      console.log(tokenIDs)
      console.log(quantities)
      console.log(cartPrice)
      console.log(totalCartPrice)
 
-    const { config, error } = usePrepareContractWrite({
+    /*
+    const { config } = usePrepareContractWrite({
+        address: '0x1F005f90d9723bc5b4Df5CF4E7c5A5BEaC633F99',
+        abi: [
+            {
+              name: 'buyBulk',
+              inputs: [ {internalType: "address", name: "to", type: "address"}, {internalType: "uint256[]", name: "ids", type: "uint256[]"}, {internalType: "uint256[]", name: "amounts", type: "uint256[]" } ],
+              outputs: [],
+              stateMutability: 'payable',
+              type: 'function',
+            },
+          ],
+        functionName: 'buyBulk',
+        args: [ (address!), (tokenIDs), (quantities) ],
+        overrides: {
+            value: cartPrice,
+        },
+        chainId: 11155111,
+    })
+    */
+    
+
+    const contractWrite = useContractWrite({
+        mode:'recklesslyUnprepared',
         address: '0x1F005f90d9723bc5b4Df5CF4E7c5A5BEaC633F99',
         abi: [
             {
@@ -77,7 +105,19 @@ const CartPage : NextPage = () => {
         chainId: 11155111,
     })
 
-    const contractWrite = useContractWrite(config)
+    const waitForTransaction = useWaitForTransaction({
+        hash: contractWrite.data?.hash,
+        confirmations: 2,
+        onSuccess() {
+            addToast(`Your Order is Paid in full! You can ship anytime!!`, { 
+                appearance: 'success',
+                autoDismiss: true,     // Whether the toast should automatically dismiss
+                autoDismissTimeout: 1500, // Timeout in milliseconds before the toast automatically dismisses
+    
+            });
+            setCartItem([])
+        },
+    })
     
 
     const handleBuy = async () => {
@@ -87,7 +127,15 @@ const CartPage : NextPage = () => {
           console.log(err)
         }
     }
+
     
+/*
+    const removeCart =async () => {
+        
+    }
+
+*/
+
     
     return (
         <div>

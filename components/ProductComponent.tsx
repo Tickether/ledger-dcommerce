@@ -96,7 +96,12 @@ const ProductComponent = ({product}: ProductProps) => {
         try {
             if (cartItem.findIndex(cart => cart.product.tokenId ===product.tokenId) === -1) {
                 setCartItem(prevState => [...prevState, { product, quantity: 1, price: latestPrice }])
-                addToast('Carti!!!', { appearance: 'success' });
+                addToast('Carti!!!', { 
+                    appearance: 'success',
+                    autoDismiss: true,     // Whether the toast should automatically dismiss
+                    autoDismissTimeout: 1500, // Timeout in milliseconds before the toast automatically dismisses
+    
+                });
             } 
             else {
                 setCartItem(prevState => {
@@ -111,7 +116,12 @@ const ProductComponent = ({product}: ProductProps) => {
                     });
                     return updatedCart as CartProps[];
                 });
-                addToast(`added another ${product.title} to Carti!!!`, { appearance: 'success' });
+                addToast(`added another ${product.title} to Carti!!!`, { 
+                    appearance: 'success',
+                    autoDismiss: true,     // Whether the toast should automatically dismiss
+                    autoDismissTimeout: 1500, // Timeout in milliseconds before the toast automatically dismisses
+    
+                });
             }
           
         } catch (err) {
