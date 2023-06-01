@@ -1,7 +1,8 @@
-import { useAccount, useContractWrite, usePrepareContractWrite } from 'wagmi';
+import { useAccount, useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi';
 import styles from '../styles/ShipOut.module.css'
 import { BigNumber } from 'ethers';
 import { useEffect, useState } from 'react';
+import { useToasts } from 'react-toast-notifications';
 
 
 
@@ -12,6 +13,7 @@ const ShipOutComponent = ({setOpen, order} : any) => {
     console.log(order)
     
     const {address, isConnected} = useAccount()
+    const { addToast } = useToasts();
 
     const [ shippingInfo, setShippingInfo ] = useState({
         firstname : undefined,
@@ -38,7 +40,7 @@ const ShipOutComponent = ({setOpen, order} : any) => {
         setShippingInfo((prev)=>({...prev, [e.target.id]:e.target.value}))
     };
 
-    /*
+    
     const prepareContractWriteClaimShipping = usePrepareContractWrite({
         address: '0x1F005f90d9723bc5b4Df5CF4E7c5A5BEaC633F99',
         abi: [
@@ -54,24 +56,20 @@ const ShipOutComponent = ({setOpen, order} : any) => {
         args: [ (address!), (BigNumber.from(order.token)), (BigNumber.from(order.claim)) ],
         chainId: 11155111,
     })
-    */
+    
 
-    const  contractWriteClaimShipping = useContractWrite({
-        mode: 'recklesslyUnprepared',
-        address: '0x1F005f90d9723bc5b4Df5CF4E7c5A5BEaC633F99',
-        abi: [
-            {
-              name: 'claimShipping',
-              inputs: [ {internalType: "address", name: "to", type: "address"}, {internalType: "uint256", name: "id", type: "uint256"}, {internalType: "uint256", name: "amount", type: "uint256"} ],
-              outputs: [],
-              stateMutability: 'nonpayable',
-              type: 'function',
-            },
-          ],
-        functionName: 'claimShipping',
-        args: [ (address!), (BigNumber.from(order.token)), (BigNumber.from(order.claim)) ],
-        chainId: 11155111,
-        onSuccess(){
+    const  contractWriteClaimShipping = useContractWrite(prepareContractWriteClaimShipping.config)
+
+    const waitForTransaction = useWaitForTransaction({
+        hash: contractWriteClaimShipping.data?.hash,
+        confirmations: 2,
+        onSuccess() {
+            addToast(`Processing for Shipping! Check mail for confirmation & tracking!!`, { 
+                appearance: 'success',
+                autoDismiss: true,     // Whether the toast should automatically dismiss
+                autoDismissTimeout: 1500, // Timeout in milliseconds before the toast automatically dismisses
+    
+            });
             sendMail()
             setOpen(false)
         },

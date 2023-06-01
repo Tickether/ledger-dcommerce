@@ -1,7 +1,8 @@
-import { useAccount, useContractWrite, usePrepareContractWrite } from 'wagmi';
+import { useAccount, useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi';
 import styles from '../styles/ShipOut.module.css'
 import { BigNumber } from 'ethers';
 import { useEffect, useState } from 'react';
+import { useToasts } from 'react-toast-notifications';
 
 
 
@@ -12,6 +13,7 @@ const ShipOutBulkComponent = ({setOpen, finalOrders} : any) => {
     console.log(finalOrders) 
 
     const {address, isConnected} = useAccount()
+    const { addToast } = useToasts();
 
     const [ shippingInfo, setShippingInfo ] = useState({
         firstname : undefined,
@@ -39,7 +41,7 @@ const ShipOutBulkComponent = ({setOpen, finalOrders} : any) => {
     };
 
 
-    /*
+    
     const prepareContractWriteClaimShippingBulk = usePrepareContractWrite({
         address: '0x1F005f90d9723bc5b4Df5CF4E7c5A5BEaC633F99',
         abi: [
@@ -55,27 +57,22 @@ const ShipOutBulkComponent = ({setOpen, finalOrders} : any) => {
         args: [ (address!), finalOrders.tokens, (finalOrders.claims) ],
         chainId: 11155111,
     })
-*/
-    const  contractWriteClaimShippingBulk = useContractWrite({
-        mode: 'recklesslyUnprepared',
-        address: '0x1F005f90d9723bc5b4Df5CF4E7c5A5BEaC633F99',
-        abi: [
-            {
-            name: 'claimShippingBulk',
-            inputs: [ {internalType: "address", name: "to", type: "address"}, {internalType: "uint256[]", name: "ids", type: "uint256[]"}, {internalType: "uint256[]", name: "amounts", type: "uint256[]"} ],
-            outputs: [],
-            stateMutability: 'nonpayable',
-            type: 'function',
-            },
-        ],
-        functionName: 'claimShippingBulk',
-        args: [ (address!), finalOrders.tokens, (finalOrders.claims) ],
-        chainId: 11155111,
-        onSuccess(){
+
+    const  contractWriteClaimShippingBulk = useContractWrite(prepareContractWriteClaimShippingBulk.config)
+
+    const waitForTransaction = useWaitForTransaction({
+        hash: contractWriteClaimShippingBulk.data?.hash,
+        confirmations: 2,
+        onSuccess() {
+            addToast(`Processing for Shipping! Check mail for confirmation & tracking!!`, { 
+                appearance: 'success',
+                autoDismiss: true,     // Whether the toast should automatically dismiss
+                autoDismissTimeout: 1500, // Timeout in milliseconds before the toast automatically dismisses
+    
+            });
             sendMail()
             setOpen(false)
         },
-
     })
     
     const sendMail = async () => {
