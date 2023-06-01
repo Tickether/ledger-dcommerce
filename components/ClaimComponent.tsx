@@ -95,7 +95,7 @@ const ClaimComponent = ({ product, Order} : ProductProps) => {
         //Order(orderInfo)
         
 
-    }, [getClaimed, getBalance, product, claimAmount]);
+    }, [getClaimed, getBalance, product, claimAmount, balance, claimed]);
 
     const prevOrderRef = useRef(order);
 
