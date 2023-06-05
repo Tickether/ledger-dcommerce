@@ -2,7 +2,7 @@ import styles from '../styles/Product.module.css'
 import Link from "next/link";
 //import Image from 'next/image';
 import { Attributes, Product } from "../models/models";
-import { useAccount, useContractRead, useContractWrite } from "wagmi";
+import { useAccount, useContractRead, useContractWrite, useWaitForTransaction } from "wagmi";
 import { BigNumber, ethers } from 'ethers';
 import { useRecoilState } from 'recoil'
 import { CartProps, cartState } from "../atom/cartState";
@@ -81,6 +81,20 @@ const ProductComponent = ({product}: ProductProps) => {
             value: getLatestPrice,
         },
         chainId: 11155111,
+    })
+
+    const waitForTransaction = useWaitForTransaction({
+        hash: contractWrite.data?.hash,
+        confirmations: 2,
+        onSuccess() {
+            addToast(`Your paid for ${product.title}! You can ship anytime!!`, { 
+                appearance: 'success',
+                autoDismiss: true,     // Whether the toast should automatically dismiss
+                autoDismissTimeout: 1500, // Timeout in milliseconds before the toast automatically dismisses
+    
+            });
+            setCartItem([])
+        },
     })
 
     const handleBuy = async () => {
