@@ -62,7 +62,7 @@ const ShipOutBulkComponent = ({setOpen, finalOrders} : any) => {
 
     const waitForTransaction = useWaitForTransaction({
         hash: contractWriteClaimShippingBulk.data?.hash,
-        confirmations: 2,
+        confirmations: 1,
         onSuccess() {
             addToast(`Processing for Shipping! Check mail for confirmation & tracking!!`, { 
                 appearance: 'success',

@@ -107,7 +107,7 @@ const CartPage : NextPage = () => {
 
     const waitForTransaction = useWaitForTransaction({
         hash: contractWrite.data?.hash,
-        confirmations: 2,
+        confirmations: 1,
         onSuccess() {
             addToast(`Your Order is Paid in full! You can ship anytime!!`, { 
                 appearance: 'success',

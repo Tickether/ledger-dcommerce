@@ -85,7 +85,7 @@ const ProductComponent = ({product}: ProductProps) => {
 
     const waitForTransaction = useWaitForTransaction({
         hash: contractWrite.data?.hash,
-        confirmations: 2,
+        confirmations: 1,
         onSuccess() {
             addToast(`Your paid for ${product.title}! You can ship anytime!!`, { 
                 appearance: 'success',
