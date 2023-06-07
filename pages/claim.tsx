@@ -20,7 +20,7 @@ interface ordersInfoProps {
 
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  
+    const {address} = useAccount()
     const settings = {
       apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY, //"wQhhyq4-jQcPzFRui3PljR6pzRwd5N_n",
       network: Network.ETH_SEPOLIA,
@@ -29,7 +29,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
     // init with key and chain info 
     const alchemy = new Alchemy(settings);
     // Print total NFT collection returned in the response:
-    const nfts = await alchemy.nft.getNftsForOwner("0xF7B083022560C6b7FD0a758A5A1edD47eA87C2bC" , {contractAddresses: ['0x1F005f90d9723bc5b4Df5CF4E7c5A5BEaC633F99']})
+    const nfts = await alchemy.nft.getNftsForOwner(address! , {contractAddresses: ['0x1F005f90d9723bc5b4Df5CF4E7c5A5BEaC633F99']})
     const ownedProducts = JSON.stringify(nfts)
     console.log(nfts) 
     // Pass data to the page via props
@@ -90,7 +90,7 @@ const ClaimPage: NextPage <{ ownedProducts: string }> = ({ ownedProducts }) => {
         console.log(tokens, claims)
         setFinalOrders(ordersInfo)
 
-    },[orders] ) 
+    },[orders]) 
 
     
     
