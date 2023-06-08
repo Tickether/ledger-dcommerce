@@ -18,9 +18,9 @@ interface ordersInfoProps {
     claims: BigNumber[]
 }
 
-
+/*
 export const getServerSideProps: GetServerSideProps = async () => {
-    const {address} = useAccount()
+    //const {address} = useAccount()
     const settings = {
       apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY, //"wQhhyq4-jQcPzFRui3PljR6pzRwd5N_n",
       network: Network.ETH_SEPOLIA,
@@ -29,28 +29,53 @@ export const getServerSideProps: GetServerSideProps = async () => {
     // init with key and chain info 
     const alchemy = new Alchemy(settings);
     // Print total NFT collection returned in the response:
-    const nfts = await alchemy.nft.getNftsForOwner(address! , {contractAddresses: ['0x1F005f90d9723bc5b4Df5CF4E7c5A5BEaC633F99']})
+    const nfts = await alchemy.nft.getNftsForOwner('0xF7B083022560C6b7FD0a758A5A1edD47eA87C2bC' , {contractAddresses: ['0x1F005f90d9723bc5b4Df5CF4E7c5A5BEaC633F99']})
     const ownedProducts = JSON.stringify(nfts)
     console.log(nfts) 
     // Pass data to the page via props
     return { props: { ownedProducts } }
 }
+*/
 
 
-const ClaimPage: NextPage <{ ownedProducts: string }> = ({ ownedProducts }) => {
+const ClaimPage: NextPage  = () => {
 
-    const {isConnected} = useAccount()
+    //const {isConnected} = useAccount()
 
-    const ownProducts = (JSON.parse(ownedProducts)).ownedNfts
-    console.log(ownProducts) 
+    //const ownProducts = (JSON.parse(ownedProducts)).ownedNfts
+    //console.log(ownProducts) 
     // show nfts owned
     // and claims available for each item    
-    //const {address, isConnected} = useAccount()
+    //
 
     const [openModal, setOpenModal] = useState(false)
     const [orders, setOrders] = useState<any[]>([]);
     const [finalOrders, setFinalOrders] = useState<ordersInfoProps>();
     const [shippable, setShippable] = useState<boolean>()
+    const [ownedProducts, setOwnedProducts] = useState<any[]>([])
+
+    const {address, isConnected} = useAccount()
+
+    useEffect(() => {
+        const fetchData = async () => {
+          const settings = {
+            apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY,
+            network: Network.ETH_SEPOLIA,
+          };
+    
+          const alchemy = new Alchemy(settings);
+    
+          try {
+            const nfts = await alchemy.nft.getNftsForOwner(address!, { contractAddresses: ['0x1F005f90d9723bc5b4Df5CF4E7c5A5BEaC633F99'] });
+            console.log(nfts.ownedNfts)
+            setOwnedProducts(nfts.ownedNfts);
+          } catch (error) {
+            console.error('Failed to fetch owned NFTs:', error);
+          }
+        };
+    
+        fetchData();
+      }, []);
 
     console.log(orders)
     console.log(orders.length)
@@ -121,9 +146,9 @@ const ClaimPage: NextPage <{ ownedProducts: string }> = ({ ownedProducts }) => {
                         <div className={styles.claim}>
                             <div className={styles.claimItems}>
                                 {
-                                    ownProducts.length <= 0 
+                                    ownedProducts.length <= 0 
                                     ? <h1>you have no claims</h1>
-                                    : ownProducts.map(( product: Product) => 
+                                    : ownedProducts.map(( product: Product) => 
                                         <ClaimComponent 
                                             key={product.tokenId} 
                         
